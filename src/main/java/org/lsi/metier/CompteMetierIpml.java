@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class CompteMetierIpml implements CompteMetier {
@@ -20,22 +21,42 @@ public class CompteMetierIpml implements CompteMetier {
     @Autowired
     private EmployeRepository employeRepository;
 
-    @Override
-    public Compte addCompte(String type, String codeCompte, double solde, Long clientId, Long employeId, Double taux, Double decouvert) {
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client non trouvé"));
-        Employe employe = employeRepository.findById(employeId)
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
-        Compte compte;
-        if ("CC".equals(type)) {
-            compte = new CompteCourant(codeCompte, new Date(), solde, decouvert != null ? decouvert : 0.0);
-        } else if ("CE".equals(type)) {
-            compte = new CompteEpargne(codeCompte, new Date(), solde, taux != null ? taux : 0.0);
-        } else {
-            throw new RuntimeException("Type de compte non valide");
+    public Compte ajouterCompte(String typeCompte, double montant, Long codeClient, Long codeEmploye, Double taux, Double decouvert) {
+        try {
+            // Récupérer le client
+            Client client = clientRepository.findById(codeClient)
+                    .orElseThrow(() -> new RuntimeException("Client non trouvé"));
+
+            // Récupérer l'employé
+            Employe employe = employeRepository.findById(codeEmploye)
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+
+            // Créer le compte en fonction du type
+            Compte compte;
+            if ("CC".equals(typeCompte)) {
+                compte = new CompteCourant();
+                ((CompteCourant) compte).setDecouvert(decouvert);
+            } else if ("CE".equals(typeCompte)) {
+                compte = new CompteEpargne();
+                ((CompteEpargne) compte).setTaux(taux);
+            } else {
+                throw new RuntimeException("Type de compte invalide");
+            }
+
+            // Paramétrer le compte
+            compte.setCodeCompte(UUID.randomUUID().toString()); // Génération d'un code unique
+            compte.setDateCreation(new Date()); // Date actuelle
+            compte.setSolde(montant);
+            compte.setClient(client);
+            compte.setEmploye(employe);
+
+            // Sauvegarder le compte
+            return compteRepository.save(compte);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de l'ajout du compte : " + e.getMessage());
         }
-        compte.setClient(client);
-        compte.setEmploye(employe);
-        return compteRepository.save(compte);
     }
+
+
 }

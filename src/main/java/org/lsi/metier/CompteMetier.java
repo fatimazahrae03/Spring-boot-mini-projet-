@@ -3,5 +3,5 @@ package org.lsi.metier;
 import org.lsi.entities.Compte;
 
 public interface CompteMetier {
-    Compte addCompte(String type, String codeCompte, double solde, Long clientId, Long employeId, Double taux, Double decouvert);
+    public Compte ajouterCompte(String typeCompte, double montant, Long codeClient, Long codeEmploye, Double taux, Double decouvert);
 }
