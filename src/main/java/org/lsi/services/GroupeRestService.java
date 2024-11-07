@@ -43,7 +43,7 @@ public class GroupeRestService {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{codeGroupe}/emplye/{codeEmploye}")
+    @PutMapping(value = "/{codeGroupe}/employe/{codeEmploye}")
     public Groupe assignEmployeesToGroupe(
             @PathVariable Long codeGroupe,
             @PathVariable Long codeEmploye

@@ -18,4 +18,12 @@ public class ClientMetierImpl implements ClientMetier {
 // TODO Auto-generated method stub
         return clientRepository.findAll();
     }
+    @Override
+    public void deleteClient(Long id) {
+        if (clientRepository.existsById(id)) {
+            clientRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Client avec ID " + id + " non trouvé.");
+        }
+    }
 }

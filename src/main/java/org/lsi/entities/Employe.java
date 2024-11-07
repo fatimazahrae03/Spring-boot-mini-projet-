@@ -16,14 +16,16 @@ public class Employe implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeEmploye;
     private String nomEmploye;
+
     @ManyToOne
     @JoinColumn(name = "code_emp_sup")
     private Employe employeSup;
+
     @ManyToMany
     @JoinTable(name = "EMP_GR",
             joinColumns = @JoinColumn(name = "code_employe"),
             inverseJoinColumns = @JoinColumn(name = "code_groupe"))
-    @JsonBackReference
+
     private Collection<Groupe> groupes;
 
 

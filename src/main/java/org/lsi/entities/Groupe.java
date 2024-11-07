@@ -15,7 +15,7 @@ public class Groupe implements Serializable {
     private String nomGroupe;
 
     @ManyToMany(mappedBy = "groupes")
-    @JsonManagedReference
+
     private Collection<Employe> employe;
 
     public Groupe(String nomGroupe) {
