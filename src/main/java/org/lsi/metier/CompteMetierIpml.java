@@ -58,5 +58,10 @@ public class CompteMetierIpml implements CompteMetier {
         }
     }
 
+    @Override
+    public Compte getCompteByCode(String codeCompte) {
+        return compteRepository.findByCodeCompte(codeCompte);
+    }
+
 
 }

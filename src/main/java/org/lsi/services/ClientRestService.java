@@ -6,18 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/clients")
 public class ClientRestService {
     @Autowired
     private ClientMetier clientMetier;
-    @RequestMapping(value="/clients",method=RequestMethod.POST)
+    @RequestMapping(value="/save",method=RequestMethod.POST)
     public Client saveClient(@RequestBody Client c) {
         return clientMetier.saveClient(c);
     }
-    @RequestMapping(value="/clients",method=RequestMethod.GET)
+    @GetMapping
     public List<Client> listClient() {
         return clientMetier.listClient();
     }
-    @DeleteMapping("/clients/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteClient(@PathVariable Long id) {
         clientMetier.deleteClient(id);
     }
