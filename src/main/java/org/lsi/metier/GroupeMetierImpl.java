@@ -44,28 +44,20 @@ public class GroupeMetierImpl implements GroupeMetier {
     }
 
     @Override
+    @Transactional
     public Groupe assignEmployeesToGroupe(Long codeGroupe, List<Long> employeIds) {
-        // Récupérer le groupe
         Groupe groupe = groupeRepository.findById(codeGroupe)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID : " + codeGroupe));
 
-        // Parcourir la liste d'IDs d'employés et les ajouter au groupe
         for (Long codeEmploye : employeIds) {
             Employe employe = employeRepository.findById(codeEmploye)
                     .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID : " + codeEmploye));
 
-            // Ajouter l'employé au groupe
             groupe.getEmploye().add(employe);
-
-            // Ajouter le groupe à l'employé (pour maintenir la relation bidirectionnelle)
             employe.getGroupes().add(groupe);
         }
 
-        // Sauvegarder les changements
-        groupeRepository.save(groupe);
-
-        // Retourner le groupe avec les employés ajoutés
-        return groupe;
+        return groupeRepository.save(groupe);
     }
 }
 
