@@ -1,45 +1,60 @@
 package org.lsi.entities;
+
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
 @Entity
-
-
 public class Client implements Serializable {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeClient;
+
     private String nomClient;
-    @OneToMany(mappedBy="client",fetch=FetchType.LAZY)
-    private Collection<Compte> comptes;
-    public Long getCodeClient() {
-        return codeClient;
+
+    // One-to-many relationship with Compte, mapped by 'client' in the Compte class
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY) // Optionally set fetch type
+    @JsonManagedReference  // Prevent circular reference by serializing only this side
+    private List<Compte> comptes;
+
+    // Default constructor
+    public Client() {
+        super();
     }
-    public void setCodeClient(Long codeClient) {
-        this.codeClient = codeClient;
-    }
-    public String getNomClient() {
-        return nomClient;
-    }
-    public void setNomClient(String nomClient) {
-        this.nomClient = nomClient;
-    }
-    public Collection<Compte> getComptes() {
-        return comptes;
-    }
-    public void setComptes(Collection<Compte> comptes) {
-        this.comptes = comptes;
-    }
+
+    // Constructor with nomClient
     public Client(String nomClient) {
         super();
         this.nomClient = nomClient;
     }
-    public Client() {
-        super();
+
+    // Getter and Setter for codeClient
+    public Long getCodeClient() {
+        return codeClient;
+    }
+
+    public void setCodeClient(Long codeClient) {
+        this.codeClient = codeClient;
+    }
+
+    // Getter and Setter for nomClient
+    public String getNomClient() {
+        return nomClient;
+    }
+
+    public void setNomClient(String nomClient) {
+        this.nomClient = nomClient;
+    }
+
+    // Getter and Setter for comptes
+    public List<Compte> getComptes() {
+        return comptes;
+    }
+
+    public void setComptes(List<Compte> comptes) {
+        this.comptes = comptes;
     }
 }

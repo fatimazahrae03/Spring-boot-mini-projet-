@@ -3,16 +3,11 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonTypeId;
-
-
 
 
 @Entity
@@ -29,7 +24,8 @@ public abstract class Compte implements Serializable {
     private Date dateCreation;
     private double solde;
     @ManyToOne
-    @JoinColumn(name="CODE_CLI")
+    @JoinColumn(name = "codeClient")
+    @JsonBackReference  // Prevent serialization of this side in the circular reference
     private Client client;
     @ManyToOne
     @JoinColumn(name="CODE_EMP")

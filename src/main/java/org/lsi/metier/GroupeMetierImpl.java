@@ -1,18 +1,14 @@
-// File: src/main/java/org/lsi/metier/GroupeMetierImpl.java
 package org.lsi.metier;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import org.lsi.dao.EmployeRepository;
 import org.lsi.dao.GroupeRepository;
-import org.lsi.entities.Client;
 import org.lsi.entities.Employe;
 import org.lsi.entities.Groupe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GroupeMetierImpl implements GroupeMetier {
@@ -23,24 +19,19 @@ public class GroupeMetierImpl implements GroupeMetier {
     @Autowired
     private EmployeRepository employeRepository;
 
-
     @Override
     public Groupe saveGroupe(Groupe g) {
-// TODO Auto-generated method stub
         return groupeRepository.save(g);
     }
 
-
     @Override
     public List<Groupe> listGroupe() {
-// TODO Auto-generated method stub
         return groupeRepository.findAll();
     }
 
     @Override
-    public void deleteGroupe(long Codegroupe ) {
-// TODO Auto-generated method stub
-        groupeRepository.deleteById(Codegroupe);
+    public void deleteGroupe(long codeGroupe) {
+        groupeRepository.deleteById(codeGroupe);
     }
 
     @Override
@@ -60,7 +51,3 @@ public class GroupeMetierImpl implements GroupeMetier {
         return groupeRepository.save(groupe);
     }
 }
-
-
-
-

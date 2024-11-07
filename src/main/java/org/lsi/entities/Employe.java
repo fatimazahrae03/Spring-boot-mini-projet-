@@ -21,6 +21,7 @@ public class Employe implements Serializable {
     @JoinColumn(name = "code_emp_sup")
     private Employe employeSup;
 
+
     @ManyToMany
     @JoinTable(name = "EMP_GR",
             joinColumns = @JoinColumn(name = "code_employe"),
@@ -34,6 +35,7 @@ public class Employe implements Serializable {
         super();
         this.nomEmploye = nomEmploye;
     }
+
 
     public Employe() {
         super();
