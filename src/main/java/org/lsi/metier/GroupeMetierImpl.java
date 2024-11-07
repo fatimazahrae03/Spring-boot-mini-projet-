@@ -43,28 +43,32 @@ public class GroupeMetierImpl implements GroupeMetier {
         groupeRepository.deleteById(Codegroupe);
     }
 
-    public Groupe assignEmployeesToGroupe(Long codeGroupe, Long codeEmploye) {
+    @Override
+    public Groupe assignEmployeesToGroupe(Long codeGroupe, List<Long> employeIds) {
         // Récupérer le groupe
         Groupe groupe = groupeRepository.findById(codeGroupe)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID : " + codeGroupe));
 
-        // Récupérer l'employé
-        Employe employe = employeRepository.findById(codeEmploye)
-                .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID : " + codeEmploye));
+        // Parcourir la liste d'IDs d'employés et les ajouter au groupe
+        for (Long codeEmploye : employeIds) {
+            Employe employe = employeRepository.findById(codeEmploye)
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID : " + codeEmploye));
 
-        // Ajouter l'employé au groupe
-        groupe.getEmploye().add(employe);
+            // Ajouter l'employé au groupe
+            groupe.getEmploye().add(employe);
 
-        // Ajouter le groupe à l'employé (pour maintenir la relation bidirectionnelle si nécessaire)
-        employe.getGroupes().add(groupe);
+            // Ajouter le groupe à l'employé (pour maintenir la relation bidirectionnelle)
+            employe.getGroupes().add(groupe);
+        }
 
         // Sauvegarder les changements
-        employeRepository.save(employe);
         groupeRepository.save(groupe);
 
+        // Retourner le groupe avec les employés ajoutés
         return groupe;
     }
-
-
-
 }
+
+
+
+
