@@ -10,5 +10,5 @@ public interface GroupeMetier {
     public Groupe saveGroupe(Groupe g);
     public List<Groupe> listGroupe();
     public void deleteGroupe(long Codegroupe );
-    public Groupe assignEmployeesToGroupe(Long codeGroupe, Long codeEmploye);
+    public Groupe assignEmployeesToGroupe(Long codeGroupe, List<Long> employeIds);
 }

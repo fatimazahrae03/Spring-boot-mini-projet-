@@ -25,8 +25,8 @@ public class Employe implements Serializable {
     @JoinTable(name = "EMP_GR",
             joinColumns = @JoinColumn(name = "code_employe"),
             inverseJoinColumns = @JoinColumn(name = "code_groupe"))
-
-    private Collection<Groupe> groupes;
+    @JsonBackReference
+    private Collection<Groupe> groupes = new HashSet<>();
 
 
 

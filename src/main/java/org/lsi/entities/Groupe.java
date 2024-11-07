@@ -1,6 +1,7 @@
  package org.lsi.entities;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -15,9 +16,9 @@ public class Groupe implements Serializable {
     private String nomGroupe;
 
     @ManyToMany(mappedBy = "groupes")
+    @JsonManagedReference
 
-    private Collection<Employe> employe;
-
+    private Collection<Employe> employe = new HashSet<>();
     public Groupe(String nomGroupe) {
         super();
         this.nomGroupe = nomGroupe;

@@ -43,11 +43,11 @@ public class GroupeRestService {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{codeGroupe}/employe/{codeEmploye}")
+    @PutMapping(value = "/{codeGroupe}/employe")
     public Groupe assignEmployeesToGroupe(
             @PathVariable Long codeGroupe,
-            @PathVariable Long codeEmploye
+            @RequestBody List<Long> employeIds  // Liste des IDs des employés à affecter
     ) {
-        return groupeMetier.assignEmployeesToGroupe(codeGroupe, codeEmploye);
+        return groupeMetier.assignEmployeesToGroupe(codeGroupe, employeIds);
     }
 }
