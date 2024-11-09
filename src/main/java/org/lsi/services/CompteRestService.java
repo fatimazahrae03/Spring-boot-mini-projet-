@@ -77,5 +77,16 @@ public class CompteRestService {
         return new ResponseEntity<>(comptes, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Compte>> getAllComptes() {
+        List<Compte> comptes = compteMetier.getAllComptes();
+
+        if (comptes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(comptes, HttpStatus.OK);
+    }
+
 
 }

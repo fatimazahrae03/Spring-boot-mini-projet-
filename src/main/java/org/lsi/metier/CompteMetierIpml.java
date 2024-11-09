@@ -190,6 +190,10 @@ public class CompteMetierIpml implements CompteMetier {
         operationRepository.save(versement);  // Save the operation for the destination account
     }
 
+    @Override
+    public List<Compte> getAllComptes() {
+        return compteRepository.findAll();
+    }
 
 
 }

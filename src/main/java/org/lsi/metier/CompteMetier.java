@@ -17,4 +17,5 @@ public interface CompteMetier {
     void versement(String codeCompte, double montant, Long employeId);
     void retrait(String codeCompte, double montant, Long employeId);
     void virement(String codeCompte1, String codeCompte2, double montant,Long employeId);
+    List<Compte> getAllComptes();
 }

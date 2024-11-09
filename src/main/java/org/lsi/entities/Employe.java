@@ -3,12 +3,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 @Entity
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Employe implements Serializable {
@@ -26,7 +23,7 @@ public class Employe implements Serializable {
     @JoinTable(name = "EMP_GR",
             joinColumns = @JoinColumn(name = "code_employe"),
             inverseJoinColumns = @JoinColumn(name = "code_groupe"))
-    @JsonBackReference
+    @JsonBackReference  // Change to JsonManagedReference
     private Collection<Groupe> groupes = new HashSet<>();
 
 
