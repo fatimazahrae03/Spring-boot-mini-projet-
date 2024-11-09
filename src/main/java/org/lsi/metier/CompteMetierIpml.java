@@ -92,7 +92,12 @@ public class CompteMetierIpml implements CompteMetier {
 
     @Override
     public Compte getCompteByCode(String codeCompte) {
-        return compteRepository.findByCodeCompte(codeCompte);
+        Compte compte = compteRepository.findByCodeCompte(codeCompte);
+        if (compte != null) {
+            // Force le chargement du client
+            compte.getClient().getCodeClient();
+        }
+        return compte;
     }
 
 

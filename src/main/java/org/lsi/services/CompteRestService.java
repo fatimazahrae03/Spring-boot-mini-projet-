@@ -20,17 +20,19 @@ public class CompteRestService {
 
 
     @RequestMapping(value = "/{codeCompte}", method = RequestMethod.GET)
-    public ResponseEntity<Compte> getCompteByCode(@PathVariable("codeCompte") String codeCompte) {
-        // Call the service method to retrieve the Compte by its code
-        Compte compte = compteMetier.getCompteByCode(codeCompte);
+    public ResponseEntity<?> getCompteByCode(@PathVariable("codeCompte") String codeCompte) {
+        try {
+            Compte compte = compteMetier.getCompteByCode(codeCompte);
 
-        if (compte == null) {
-            // Return a 404 Not Found response if the Compte does not exist
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (compte == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>(compte, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Erreur interne du serveur", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        // Return the Compte with a 200 OK response
-        return new ResponseEntity<>(compte, HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     public void deleteCompte(@PathVariable String id) {

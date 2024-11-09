@@ -23,9 +23,10 @@ public abstract class Compte implements Serializable {
     private String codeCompte;
     private Date dateCreation;
     private double solde;
-    @ManyToOne
-    @JoinColumn(name = "CODE_CLI")  // Changed dash to underscore
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CODE_CLI")
+    @JsonIgnoreProperties("comptes")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Client client;
     @ManyToOne
     @JoinColumn(name="CODE_EMP")

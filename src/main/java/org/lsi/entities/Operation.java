@@ -4,11 +4,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(length=1)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "typeOperation"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Retrait.class, name = "Retrait"),
+        @JsonSubTypes.Type(value = Versement.class, name = "Versement")
+})
 
 public class Operation implements Serializable {
     @Id
