@@ -18,6 +18,5 @@ public class Retrait extends Operation {
 
     }
 
-    // Additional specific methods for Retrait
 }
 

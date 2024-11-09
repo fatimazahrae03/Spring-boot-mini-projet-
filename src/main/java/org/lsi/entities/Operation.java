@@ -3,6 +3,7 @@ package org.lsi.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,8 @@ public class Operation implements Serializable {
     private double montant;
     @ManyToOne
     @JoinColumn(name="CODE_CPTE")
+    @JsonBackReference  // Add this annotation
+
     private Compte compte;
     @ManyToOne
     @JoinColumn(name="CODE_EMP")

@@ -4,11 +4,13 @@ import jakarta.transaction.Transactional;
 import org.lsi.dao.ClientRepository;
 import org.lsi.dao.CompteRepository;
 import org.lsi.dao.EmployeRepository;
+import org.lsi.dao.OperationRepository;
 import org.lsi.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -78,13 +80,116 @@ public class CompteMetierIpml implements CompteMetier {
         } else {
             // Si c'est le seul compte du client, supprimer aussi le client
             compteRepository.delete(compte);     // Supprimer le compte
-            clientRepository.delete(client);
+            clientRepository.delete(client);     // Supprimer le client
         }
     }
+
+    @Override
+    public List<Compte> getComptesByClientId(Long clientId) {
+        return compteRepository.findByClient_CodeClient(clientId);
+    }
+
+
     @Override
     public Compte getCompteByCode(String codeCompte) {
         return compteRepository.findByCodeCompte(codeCompte);
     }
+
+
+    @Autowired
+    private OperationRepository operationRepository;
+
+    @Override
+    @Transactional
+    public void versement(String codeCompte, double montant, Long employeId) {
+        Compte compte = compteRepository.findById(codeCompte).orElseThrow(() -> new RuntimeException("Compte not found"));
+        Employe employe = employeRepository.findById(employeId).orElseThrow(() -> new RuntimeException("Employe not found"));
+
+        if (montant <= 0) {
+            throw new IllegalArgumentException("Montant must be positive");
+        }
+
+        // Create Versement operation
+        Versement versement = new Versement();
+        versement.setDateOperation(new java.util.Date());
+        versement.setMontant(montant);
+        versement.setCompte(compte);
+        versement.setEmploye(employe);
+
+        // Update the account balance
+        compte.setSolde(compte.getSolde() + montant);
+        compteRepository.save(compte);
+
+        // Save the operation
+        operationRepository.save(versement);
+//        return versement;
+    }
+
+    @Override
+    @Transactional
+    public void retrait(String codeCompte, double montant, Long employeId) {
+        Compte compte = compteRepository.findById(codeCompte).orElseThrow(() -> new RuntimeException("Compte not found"));
+        Employe employe = employeRepository.findById(employeId).orElseThrow(() -> new RuntimeException("Employe not found"));
+
+        if (montant <= 0) {
+            throw new IllegalArgumentException("Montant must be positive");
+        }
+
+        if (compte.getSolde() < montant) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+
+        // Create Retrait operation
+        Retrait retrait = new Retrait();
+        retrait.setDateOperation(new java.util.Date());
+        retrait.setMontant(montant);
+        retrait.setCompte(compte);
+        retrait.setEmploye(employe);
+
+        // Update the account balance
+        compte.setSolde(compte.getSolde() - montant);
+        compteRepository.save(compte);
+
+        // Save the operation
+        operationRepository.save(retrait);
+    }
+    @Override
+    @Transactional
+
+    public void virement(String codeCompteSource, String codeCompteDest, double montant, Long employeId) {
+        Compte compteSource = compteRepository.findById(codeCompteSource).orElseThrow(() -> new RuntimeException("Compte source not found"));
+        Compte compteDest = compteRepository.findById(codeCompteDest).orElseThrow(() -> new RuntimeException("Compte destination not found"));
+        Employe employe = employeRepository.findById(employeId).orElseThrow(() -> new RuntimeException("Employe not found"));
+
+        if (montant <= 0) {
+            throw new IllegalArgumentException("Montant must be positive");
+        }
+
+        if (compteSource.getSolde() < montant) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+
+        // Perform Retrait on source account
+        Retrait retrait = new Retrait();
+        retrait.setDateOperation(new Date());
+        retrait.setMontant(montant);
+        retrait.setCompte(compteSource);
+        retrait.setEmploye(employe);
+        compteSource.setSolde(compteSource.getSolde() - montant);
+        compteRepository.save(compteSource);
+        operationRepository.save(retrait);  // Save the operation for the source account
+
+        // Perform Versement on destination account
+        Versement versement = new Versement();
+        versement.setDateOperation(new Date());
+        versement.setMontant(montant);
+        versement.setCompte(compteDest);
+        versement.setEmploye(employe);
+        compteDest.setSolde(compteDest.getSolde() + montant);
+        compteRepository.save(compteDest);
+        operationRepository.save(versement);  // Save the operation for the destination account
+    }
+
 
 
 }
