@@ -3,6 +3,7 @@ package org.lsi.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class Groupe implements Serializable {
     private String nomGroupe;
 
     @ManyToMany(mappedBy = "groupes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonManagedReference // This allows serialization from Groupe side
+    @JsonIgnoreProperties
     private Collection<Employe> employe = new HashSet<>();
 
     public Groupe(String nomGroupe) {
