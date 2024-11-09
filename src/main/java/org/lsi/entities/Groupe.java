@@ -1,24 +1,25 @@
- package org.lsi.entities;
+package org.lsi.entities;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-
 @Entity
-
 public class Groupe implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeGroupe;
     private String nomGroupe;
 
-    @ManyToMany(mappedBy = "groupes")
-
-
+    @ManyToMany(mappedBy = "groupes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore  // Avoid circular reference during serialization
     private Collection<Employe> employe = new HashSet<>();
+
     public Groupe(String nomGroupe) {
         super();
         this.nomGroupe = nomGroupe;
@@ -26,7 +27,6 @@ public class Groupe implements Serializable {
 
     public Groupe() {
         super();
-// TODO Auto-generated constructor stub
     }
 
     public Long getCodeGroupe() {
