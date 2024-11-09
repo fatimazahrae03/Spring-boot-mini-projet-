@@ -24,8 +24,8 @@ public abstract class Compte implements Serializable {
     private Date dateCreation;
     private double solde;
     @ManyToOne
-    @JoinColumn(name = "codeClient")
-    @JsonBackReference  // Prevent serialization of this side in the circular reference
+    @JoinColumn(name = "CODE_CLI")  // Changed dash to underscore
+    @JsonBackReference
     private Client client;
     @ManyToOne
     @JoinColumn(name="CODE_EMP")

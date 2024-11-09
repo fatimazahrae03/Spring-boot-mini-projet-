@@ -32,6 +32,10 @@ public class CompteRestService {
         // Return the Compte with a 200 OK response
         return new ResponseEntity<>(compte, HttpStatus.OK);
     }
+    @DeleteMapping("/delete/{id}")
+    public void deleteCompte(@PathVariable String id) {
+        compteMetier.deleteCompte(id);  // Appel de la méthode du service
+    }
 
     @PostMapping("/{codeEmploye}")
     public ResponseEntity<?> ajouterCompte(

@@ -30,7 +30,6 @@ public class Employe implements Serializable {
     private Collection<Groupe> groupes = new HashSet<>();
 
 
-
     public Employe(String nomEmploye) {
         super();
         this.nomEmploye = nomEmploye;

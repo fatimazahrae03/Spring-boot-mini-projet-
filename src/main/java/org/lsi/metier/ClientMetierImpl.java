@@ -1,5 +1,7 @@
 package org.lsi.metier;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import org.lsi.dao.ClientRepository;
 import org.lsi.entities.Client;
 import org.lsi.entities.Compte;
@@ -22,13 +24,18 @@ public class ClientMetierImpl implements ClientMetier {
     }
 
     @Override
+    @Transactional
     public void deleteClient(Long id) {
-        if (clientRepository.existsById(id)) {
-            clientRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Client avec ID " + id + " non trouvé.");
+        if (!clientRepository.existsById(id)) {
+            throw new IllegalArgumentException("Client with id " + id + " does not exist.");
         }
-    }
 
+        // Récupérer le client pour déclencher la suppression en cascade
+        Client client = clientRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Client with id " + id + " does not exist."));
+
+        // La suppression des comptes associés sera effectuée automatiquement en cascade
+        clientRepository.delete(client);
+    }
 
 }

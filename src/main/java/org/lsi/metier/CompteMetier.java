@@ -10,4 +10,5 @@ public interface CompteMetier {
 
 
     Compte getCompteByCode(String codeCompte);
+    public void deleteCompte(String id);
 }

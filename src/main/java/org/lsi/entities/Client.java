@@ -16,7 +16,7 @@ public class Client implements Serializable {
     private String nomClient;
 
     // One-to-many relationship with Compte, mapped by 'client' in the Compte class
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY) // Optionally set fetch type
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true) // Optionally set fetch type
     @JsonManagedReference  // Prevent circular reference by serializing only this side
     private List<Compte> comptes;
 

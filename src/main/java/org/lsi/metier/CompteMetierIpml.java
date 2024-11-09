@@ -1,5 +1,6 @@
 package org.lsi.metier;
 
+import jakarta.transaction.Transactional;
 import org.lsi.dao.ClientRepository;
 import org.lsi.dao.CompteRepository;
 import org.lsi.dao.EmployeRepository;
@@ -58,6 +59,28 @@ public class CompteMetierIpml implements CompteMetier {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteCompte(String id) {
+        // Vérifiez si le compte existe
+        Compte compte = compteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Compte with id " + id + " does not exist."));
+
+        // Récupérer le client associé au compte
+        Client client = compte.getClient();
+
+        // Vérifier le nombre de comptes du client
+        long clientCompteCount = client.getComptes().size();
+
+        // Si le client a d'autres comptes, supprimer uniquement le compte
+        if (clientCompteCount > 1) {
+            client.getComptes().remove(compte);  // Supprimer le compte de la liste des comptes du client
+            compteRepository.delete(compte);     // Supprimer le compte de la base de données
+        } else {
+            // Si c'est le seul compte du client, supprimer aussi le client
+            compteRepository.delete(compte);     // Supprimer le compte
+            clientRepository.delete(client);     // Supprimer le client
+        }
+    }
     @Override
     public Compte getCompteByCode(String codeCompte) {
         return compteRepository.findByCodeCompte(codeCompte);
