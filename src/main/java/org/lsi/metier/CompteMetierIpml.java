@@ -78,7 +78,7 @@ public class CompteMetierIpml implements CompteMetier {
         } else {
             // Si c'est le seul compte du client, supprimer aussi le client
             compteRepository.delete(compte);     // Supprimer le compte
-            clientRepository.delete(client);     // Supprimer le client
+            clientRepository.delete(client);
         }
     }
     @Override
