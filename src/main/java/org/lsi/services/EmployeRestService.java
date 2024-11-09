@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/employes")
 public class EmployeRestService {
+
     @Autowired
     private EmployeMetier employeMetier;
 
@@ -28,7 +28,6 @@ public class EmployeRestService {
         return employeMetier.getEmployeById(id);
     }
 
-    // Delete an employee by ID
     @DeleteMapping("/{id}")
     public void deleteEmploye(@PathVariable Long id) {
         employeMetier.deleteEmploye(id);

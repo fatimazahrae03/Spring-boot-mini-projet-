@@ -3,6 +3,7 @@ package org.lsi.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -11,13 +12,14 @@ import java.util.HashSet;
 @Entity
 public class Groupe implements Serializable {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codeGroupe;
     private String nomGroupe;
 
     @ManyToMany(mappedBy = "groupes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore  // Avoid circular reference during serialization
+    @JsonManagedReference // This allows serialization from Groupe side
     private Collection<Employe> employe = new HashSet<>();
 
     public Groupe(String nomGroupe) {

@@ -22,7 +22,7 @@ public class Employe implements Serializable {
     private Employe employeSup;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "EMP_GR",
             joinColumns = @JoinColumn(name = "code_employe"),
             inverseJoinColumns = @JoinColumn(name = "code_groupe"))

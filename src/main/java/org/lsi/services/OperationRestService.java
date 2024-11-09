@@ -14,7 +14,7 @@ import java.util.List;
 public class OperationRestService {
 
     @Autowired
-    private OperationRepository operationRepository;
+    private OperationRepository operationMetier;
 
     @Autowired
     private CompteMetierIpml metier;
@@ -22,28 +22,30 @@ public class OperationRestService {
     // Define endpoint to get operations by Compte ID
     @GetMapping("/compte/{codeCompte}")
     public List<Operation> getOperationsByCompteId(@PathVariable String codeCompte) {
-        return operationRepository.findByCompteId(codeCompte);
+        return operationMetier.findByCompteId(codeCompte);
     }
-
     @PostMapping("/versement/{codeCompte}/{montant}/{employeId}")
     public void effectuerVersement(@PathVariable String codeCompte,
                                    @PathVariable double montant,
                                    @PathVariable Long employeId) {
-        metier.versement(codeCompte, montant, employeId);  // Uncommented to call the service
+        metier.versement(codeCompte, montant, employeId);  // Uncomment this line
     }
 
+    // Endpoint for Retrait
     @PostMapping("/retrait/{codeCompte}/{montant}/{employeId}")
     public void effectuerRetrait(@PathVariable String codeCompte,
                                  @PathVariable double montant,
                                  @PathVariable Long employeId) {
-        metier.retrait(codeCompte, montant, employeId);  // Uncommented to call the service
+        metier.retrait(codeCompte, montant, employeId);  // Uncomment this line
     }
 
+    // Endpoint for Virement
     @PostMapping("/virement/{codeCompteSource}/{codeCompteDest}/{montant}/{employeId}")
     public void effectuerVirement(@PathVariable String codeCompteSource,
                                   @PathVariable String codeCompteDest,
                                   @PathVariable double montant,
                                   @PathVariable Long employeId) {
-        metier.virement(codeCompteSource, codeCompteDest, montant, employeId);  // Uncommented to call the service
+        metier.virement(codeCompteSource, codeCompteDest, montant, employeId);  // Uncomment this line
     }
+
 }
