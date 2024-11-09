@@ -31,6 +31,7 @@ public abstract class Compte implements Serializable {
     @JoinColumn(name="CODE_EMP")
     private Employe employe;
     @OneToMany(mappedBy="compte")
+    @JsonManagedReference  // Add this annotation
     private Collection<Operation> operations;
     public Compte(String codeCompte, Date dateCreation, double solde) {
         super();

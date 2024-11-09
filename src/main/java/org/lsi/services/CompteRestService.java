@@ -66,6 +66,16 @@ public class CompteRestService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<Compte>> getComptesByClientId(@PathVariable("clientId") Long clientId) {
+        List<Compte> comptes = compteMetier.getComptesByClientId(clientId);
+
+        if (comptes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(comptes, HttpStatus.OK);
+    }
 
 
 }

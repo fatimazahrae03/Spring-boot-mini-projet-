@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -78,9 +79,15 @@ public class CompteMetierIpml implements CompteMetier {
         } else {
             // Si c'est le seul compte du client, supprimer aussi le client
             compteRepository.delete(compte);     // Supprimer le compte
-            clientRepository.delete(client);
+            clientRepository.delete(client);     // Supprimer le client
         }
     }
+
+    @Override
+    public List<Compte> getComptesByClientId(Long clientId) {
+        return List.of();
+    }
+
     @Override
     public Compte getCompteByCode(String codeCompte) {
         return compteRepository.findByCodeCompte(codeCompte);

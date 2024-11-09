@@ -10,5 +10,8 @@ public interface CompteMetier {
 
 
     Compte getCompteByCode(String codeCompte);
-    public void deleteCompte(String id);
+
+    void deleteCompte(String id);
+
+    List<Compte> getComptesByClientId(Long clientId);
 }
