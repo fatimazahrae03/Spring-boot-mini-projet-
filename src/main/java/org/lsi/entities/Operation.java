@@ -28,9 +28,8 @@ public class Operation implements Serializable {
     private Date dateOperation;
     private double montant;
     @ManyToOne
-    @JoinColumn(name="CODE_CPTE")
-    @JsonBackReference  // Add this annotation
-
+    @JoinColumn(name = "CODE_CPTE")
+    @JsonBackReference
     private Compte compte;
     @ManyToOne
     @JoinColumn(name="CODE_EMP")

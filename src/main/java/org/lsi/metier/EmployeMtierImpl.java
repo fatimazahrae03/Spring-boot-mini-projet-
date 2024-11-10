@@ -1,5 +1,7 @@
 package org.lsi.metier;
 import java.util.List;
+import java.util.Optional;
+
 import org.lsi.dao.EmployeRepository;
 import org.lsi.entities.Employe;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,11 @@ public class EmployeMtierImpl implements EmployeMetier {
             throw new RuntimeException("Employé avec ID " + id + " non trouvé.");
         }
     }
+    @Override
+    public Optional<Employe> findByNomEmploye(String nomEmploye) {
+        return employeRepository.findByNomEmploye(nomEmploye); // Ensure you have this method in your repository
+    }
+
     @Override
     public Employe getEmployeById(Long id) {
         return employeRepository.findById(id).orElse(null);

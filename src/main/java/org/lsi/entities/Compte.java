@@ -25,9 +25,10 @@ public abstract class Compte implements Serializable {
     private double solde;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CODE_CLI")
-    @JsonIgnoreProperties("comptes")
+    @JsonIgnoreProperties("comptes") // This will prevent serialization of the `comptes` property in `Client`
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Client client;
+
     @ManyToOne
     @JoinColumn(name="CODE_EMP")
     private Employe employe;
@@ -77,6 +78,7 @@ public abstract class Compte implements Serializable {
     public Collection<Operation> getOperations() {
         return operations;
     }
+
     public void setOperations(Collection<Operation> operations) {
         this.operations = operations;
     }
