@@ -24,42 +24,97 @@ public class CompteMetierIpml implements CompteMetier {
     @Autowired
     private EmployeRepository employeRepository;
 
+//    public Compte ajouterCompte(String typeCompte, double montant, Long codeClient, Long codeEmploye, Double taux, Double decouvert) {
+//        try {
+//            // Log input parameters
+//            System.out.println("Type Compte: " + typeCompte);
+//            System.out.println("Montant: " + montant);
+//            System.out.println("Code Client: " + codeClient);
+//            System.out.println("Code Employe: " + codeEmploye);
+//            System.out.println("Taux: " + taux);
+//            System.out.println("Découvert: " + decouvert);
+//
+//            // Validate codeClient
+//            if (codeClient == null) {
+//                throw new RuntimeException("Code Client ne peut pas être nul.");
+//            }
+//
+//            // Récupérer le client
+//            Client client = clientRepository.findById(codeClient)
+//                    .orElseThrow(() -> new RuntimeException("Client non trouvé avec code: " + codeClient));
+//
+//            // Récupérer l'employé
+//            Employe employe = employeRepository.findById(codeEmploye)
+//                    .orElseThrow(() -> new RuntimeException("Employé non trouvé avec code: " + codeEmploye));
+//
+//            // Créer le compte en fonction du type
+//            Compte compte;
+//            if ("CC".equals(typeCompte)) {
+//                compte = new CompteCourant();
+//                ((CompteCourant) compte).setDecouvert(decouvert);
+//            } else if ("CE".equals(typeCompte)) {
+//                compte = new CompteEpargne();
+//                ((CompteEpargne) compte).setTaux(taux);
+//            } else {
+//                throw new RuntimeException("Type de compte invalide: " + typeCompte);
+//            }
+//
+//            // Paramétrer le compte
+//            compte.setCodeCompte(UUID.randomUUID().toString()); // Génération d'un code unique
+//            compte.setDateCreation(new Date()); // Date actuelle
+//            compte.setSolde(montant);
+//            compte.setClient(client);
+//            compte.setEmploye(employe);
+//
+//            // Sauvegarder le compte
+//            return compteRepository.save(compte);
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Consider using a logger here
+//            throw new RuntimeException("Erreur lors de l'ajout du compte : " + e.getMessage());
+//        }
+//    }
+
     public Compte ajouterCompte(String typeCompte, double montant, Long codeClient, Long codeEmploye, Double taux, Double decouvert) {
         try {
-            // Récupérer le client
+            // Retrieve the client
             Client client = clientRepository.findById(codeClient)
                     .orElseThrow(() -> new RuntimeException("Client non trouvé"));
 
-            // Récupérer l'employé
+            // Retrieve the employee
             Employe employe = employeRepository.findById(codeEmploye)
                     .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
 
-            // Créer le compte en fonction du type
+            // Create the account based on type
             Compte compte;
             if ("CC".equals(typeCompte)) {
                 compte = new CompteCourant();
-                ((CompteCourant) compte).setDecouvert(decouvert);
+                if (decouvert != null) {
+                    ((CompteCourant) compte).setDecouvert(decouvert);
+                }
             } else if ("CE".equals(typeCompte)) {
                 compte = new CompteEpargne();
-                ((CompteEpargne) compte).setTaux(taux);
+                if (taux != null) {
+                    ((CompteEpargne) compte).setTaux(taux);
+                }
             } else {
                 throw new RuntimeException("Type de compte invalide");
             }
 
-            // Paramétrer le compte
-            compte.setCodeCompte(UUID.randomUUID().toString()); // Génération d'un code unique
-            compte.setDateCreation(new Date()); // Date actuelle
+            // Set the account details
+            compte.setCodeCompte(UUID.randomUUID().toString()); // Generate a unique code
+            compte.setDateCreation(new Date()); // Current date
             compte.setSolde(montant);
             compte.setClient(client);
             compte.setEmploye(employe);
 
-            // Sauvegarder le compte
+            // Save the account
             return compteRepository.save(compte);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Erreur lors de l'ajout du compte : " + e.getMessage());
         }
     }
+
 
     @Override
     @Transactional
