@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Groupes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
+    <a class="navbar-brand" href="home.html">Menu</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/groupes/list}">Groupes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/employes/liste}">Employes</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="mt-4">Liste des Groupes</h1>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom du Groupe</th>
+            <th>Employés</th>
+            <th>Actions</th> <!-- Nouvelle colonne pour le bouton de suppression -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Boucle pour chaque groupe -->
+        <tr th:each="groupe : ${groupes}">
+            <td th:text="${groupe.codeGroupe}"></td>
+            <td th:text="${groupe.nomGroupe}"></td>
+            <td>
+                <ul>
+                    <li th:each="employe : ${groupe.employe}" th:text="${employe.nomEmploye}">Employé</li>
+                </ul>
+            </td>
+            <td>
+                <!-- Formulaire pour supprimer chaque groupe -->
+                <form th:action="@{/groupes/delete/{codeGroupe}(codeGroupe=${groupe.codeGroupe})}" method="post">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce groupe ?');">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Formulaire pour ajouter un nouveau groupe -->
+    <h2 class="mt-5">Ajouter un Groupe</h2>
+    <form action="/groupes/save" method="post">
+        <div class="form-group">
+            <label for="nomGroupe">Nom du Groupe</label>
+            <input type="text" class="form-control" id="nomGroupe" name="nomGroupe" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter le Groupe</button>
+    </form>
+
+    <!-- Formulaire pour assigner des employés à un groupe -->
+    <h2 class="mt-5">Affecter des Employés à un Groupe</h2>
+    <form action="/groupes/assign" method="post">
+        <div class="form-group">
+            <label for="codeGroupe">ID du Groupe</label>
+            <input type="number" class="form-control" id="codeGroupe" name="codeGroupe" required>
+        </div>
+        <div class="form-group">
+            <label for="employeIds">IDs des Employés (séparés par des virgules)</label>
+            <input type="text" class="form-control" id="employeIds" name="employeIds" placeholder="Exemple : 1,2,3" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Affecter les Employés</button>
+    </form>
+</div>
+
+</body>
+</html>

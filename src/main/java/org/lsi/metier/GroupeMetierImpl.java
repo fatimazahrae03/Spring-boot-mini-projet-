@@ -36,18 +36,33 @@ public class GroupeMetierImpl implements GroupeMetier {
 
     @Override
     @Transactional
+    public Groupe assignEmployeeToGroup(Long codeGroupe, Long employeId) {
+        Groupe groupe = groupeRepository.findById(codeGroupe)
+                .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID : " + codeGroupe));
+
+        Employe employe = employeRepository.findById(employeId)
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID : " + employeId));
+
+        groupe.getEmploye().add(employe);
+        employe.getGroupes().add(groupe);
+
+        return groupeRepository.save(groupe);
+    }
+    @Override
     public Groupe assignEmployeesToGroupe(Long codeGroupe, List<Long> employeIds) {
         Groupe groupe = groupeRepository.findById(codeGroupe)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID : " + codeGroupe));
 
-        for (Long codeEmploye : employeIds) {
-            Employe employe = employeRepository.findById(codeEmploye)
-                    .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID : " + codeEmploye));
+        for (Long employeId : employeIds) {
+            Employe employe = employeRepository.findById(employeId)
+                    .orElseThrow(() -> new RuntimeException("Employé non trouvé avec l'ID : " + employeId));
 
+            // Ajouter l'employé au groupe
             groupe.getEmploye().add(employe);
             employe.getGroupes().add(groupe);
         }
 
-        return groupeRepository.save(groupe);
+        return groupeRepository.save(groupe); // Sauvegarde le groupe avec les nouvelles affectations
     }
+
 }

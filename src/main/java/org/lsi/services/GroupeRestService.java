@@ -6,13 +6,16 @@ import org.lsi.entities.Employe;
 import org.lsi.entities.Groupe;
 import org.lsi.metier.GroupeMetier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequestMapping("/groupes")
 public class GroupeRestService {
 
@@ -22,43 +25,65 @@ public class GroupeRestService {
     @Autowired
     private GroupeRepository groupeRepository;
 
-    // Endpoint pour ajouter un groupe
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseEntity<Void> addGroupe(@RequestBody Groupe groupe) {
-        groupeMetier.saveGroupe(groupe);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    // Endpoint to display the list of groups with employees
+    @GetMapping("/list")
+    public String afficherGroupes(Model model) {
+        try {
+            List<Groupe> groupes = groupeMetier.listGroupe();
+            model.addAttribute("groupes", groupes);
+            return "emp-sup/Listegrp";  // Assurez-vous que "Listegrp" correspond bien à un fichier template Thymeleaf
+        } catch (Exception e) {
+            // Logguez l'erreur pour avoir plus de détails
+            e.printStackTrace();
+            return "error";  // Vous pouvez avoir une vue d'erreur personnalisée
+        }
     }
 
-    @RequestMapping(value = "/getgroupes", method = RequestMethod.GET)
-    public List<Groupe> listGroupe() {
-        return groupeMetier.listGroupe();
-    }
-
-    // Delete a group and remove association with employees
-    @RequestMapping(value = "/delete/{codeGroupe}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{codeGroupe}", method = RequestMethod.POST)
     @Transactional
-    public ResponseEntity<Void> deleteGroupe(@PathVariable long codeGroupe) {
-        // Find the group
+    public String deleteGroupe(@PathVariable long codeGroupe) {
+        // Trouver le groupe
         Groupe groupe = groupeRepository.findById(codeGroupe)
                 .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'ID : " + codeGroupe));
 
-        // Remove the group from each employee's 'groupes' collection
+        // Supprimer le groupe de chaque employé
         for (Employe employe : groupe.getEmploye()) {
-            employe.getGroupes().remove(groupe);  // Remove the group from each employee
+            employe.getGroupes().remove(groupe);
         }
 
-        // After removing associations, delete the group
+        // Supprimer le groupe
         groupeRepository.deleteById(codeGroupe);
 
-        return ResponseEntity.noContent().build();
+        // Rediriger vers la liste des groupes après suppression
+        return "redirect:/groupes/list";
     }
 
-    // Assign employees to a group
-    @PutMapping(value = "/{codeGroupe}/employes")
-    public Groupe assignEmployeesToGroupe(
-            @PathVariable Long codeGroupe,
-            @RequestBody List<Long> employeIds // Liste directe des IDs d'employés
-    ) {
-        return groupeMetier.assignEmployeesToGroupe(codeGroupe, employeIds);
+    @PostMapping("/save")
+    public String addGroupe(@RequestParam("nomGroupe") String nomGroupe, RedirectAttributes redirectAttributes) {
+        Groupe groupe = new Groupe();
+        groupe.setNomGroupe(nomGroupe);
+        groupeMetier.saveGroupe(groupe);
+        redirectAttributes.addFlashAttribute("message", "Groupe ajouté avec succès !");
+        return "redirect:/groupes/list";
     }
+
+    // Endpoint pour assigner des employés à un groupe
+    @PostMapping("/assign")
+    public String assignEmployeesToGroupe(
+            @RequestParam("codeGroupe") Long codeGroupe,
+            @RequestParam("employeIds") String employeIds,
+            RedirectAttributes redirectAttributes) {
+
+        List<Long> ids = Arrays.stream(employeIds.split(","))
+                .map(String::trim)
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        groupeMetier.assignEmployeesToGroupe(codeGroupe, ids);
+        redirectAttributes.addFlashAttribute("message", "Employés affectés au groupe avec succès !");
+        return "redirect:/groupes/list";
+    }
+
+
+
 }

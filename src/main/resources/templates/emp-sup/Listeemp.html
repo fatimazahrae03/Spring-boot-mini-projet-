@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Employés</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
+    <a class="navbar-brand" href="home.html">Menu</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/groupes/list}">Groupes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/employes/liste}">Employes</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <h2 class="mt-4">Liste des Employés</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom de l'Employé</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Boucle pour chaque employé -->
+        <tr th:each="employe : ${employes}">
+            <td th:text="${employe.codeEmploye}"></td>
+            <td th:text="${employe.nomEmploye}"></td>
+            <td>
+                <!-- Bouton supprimer employé -->
+                <form th:action="@{'/employes/supprimer/' + ${employe.codeEmploye}}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3 class="mt-5">Ajouter un nouvel Employé</h3>
+    <!-- Formulaire pour ajouter un employé -->
+    <form th:action="@{/employes/save}" method="post">
+        <div class="form-group">
+            <label for="nomEmploye">Nom de l'Employé :</label>
+            <input type="text" id="nomEmploye" name="nomEmploye" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
+</div>
+</body>
+</html>
