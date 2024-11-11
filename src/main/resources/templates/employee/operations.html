@@ -1,15 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>Operations</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="icon" href="/img/logo.png" type="image/png"> <!-- Logo for the tab -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      margin-bottom: 0;
+      position: relative;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .navbar-nav {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .navbar-brand {
+      font-size: 2rem;
+    }
+    .menu-item {
+      font-size: 1.2rem;
+      margin: 0 15px;
+    }
+    .form-section {
+      margin-top: 30px;
+    }
+    .form-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .form-column {
+      width: 30%;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .btn {
+      width: 100%;
+    }
+    .bank-name {
+      position: absolute;
+      top: 10px; /* Adjust as needed */
+      left: 20px; /* Adjust as needed */
+      font-size: 24px; /* Font size for the bank name */
+      font-weight: bold; /* Make the bank name bold */
+      color: #343a40; /* Dark color for the bank name */
+      z-index: 1; /* Ensure it appears above the background */
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1 class="mt-5">Operations</h1>
-  <div class="row mt-4">
+
+<!-- Bank Name and Navbar -->
+<div class="bank-name">HappyBank</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link menu-item" th:href="@{/clients}">Clients</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu-item" th:href="@{/comptes}">Comptes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu-item" th:href="@{/operations}">Operations</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Operations Section -->
+<div class="container form-section">
+  <h1 class="mt-5 text-center">Operations</h1>
+  <div class="form-container">
     <!-- Versement Form -->
-    <div class="col-md-4">
+    <div class="form-column">
       <h3>Versement</h3>
       <form th:action="@{/operations/versement}" method="post">
         <div class="form-group">
@@ -29,7 +101,7 @@
     </div>
 
     <!-- Retrait Form -->
-    <div class="col-md-4">
+    <div class="form-column">
       <h3>Retrait</h3>
       <form th:action="@{/operations/retrait}" method="post">
         <div class="form-group">
@@ -49,7 +121,7 @@
     </div>
 
     <!-- Virement Form -->
-    <div class="col-md-4">
+    <div class="form-column">
       <h3>Virement</h3>
       <form th:action="@{/operations/virement}" method="post">
         <div class="form-group">

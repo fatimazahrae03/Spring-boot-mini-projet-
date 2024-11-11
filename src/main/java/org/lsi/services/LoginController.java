@@ -72,6 +72,6 @@ public class LoginController {
             return "redirect:/login";
         }
         return "client/home";
-    }
+}
 
 }

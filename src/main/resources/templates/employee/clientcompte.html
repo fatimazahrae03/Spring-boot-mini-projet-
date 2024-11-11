@@ -5,7 +5,80 @@
   <title>Comptes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
 </head>
+<style>
+  .container {
+    max-width: 900px; /* Set a max-width for the container */
+  }
+  .table {
+    font-size: 0.9rem; /* Reduce font size of the table */
+    width: 100%; /* Make the table take full width */
+    margin: 0 auto; /* Center the table */
+  }
+  .table .actions-column {
+    width: 150px; /* Make the action column fit the button size */
+  }
+  .form-container {
+    display: flex;
+    justify-content: center; /* Center the form horizontally */
+    align-items: center; /* Center the form vertically */
+    height: 300px; /* Set a fixed height for vertical centering */
+    margin-top: 20px;
+  }
+  .form-container form {
+    width: 100%;
+    max-width: 500px; /* Max-width to keep the form at a reasonable size */
+  }
+  .back-button {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+  }
+  .navbar {
+    margin-bottom: 0; /* Remove margin below navbar */
+    position: relative; /* Allow positioning of bank name */
+    font-size: 1.5rem; /* Increase the font size of the menu */
+    text-align: center; /* Center the navbar text */
+  }
+  .navbar-nav {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .navbar-brand {
+    font-size: 2rem; /* Make the brand name larger */
+  }
+  .menu-item {
+    font-size: 1.2rem; /* Increase the size of menu items */
+    margin: 0 15px; /* Add horizontal margin to space out menu items */
+  }
+  .bank-name {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    left: 20px; /* Adjust as needed */
+    font-size: 24px; /* Font size for the bank name */
+    font-weight: bold; /* Make the bank name bold */
+    color: #343a40; /* Dark color for the bank name */
+    z-index: 1; /* Ensure it appears above the background */
+  }
+</style>
+</head>
 <body>
+<div class="bank-name">HappyBank</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link menu-item" th:href="@{/clients}">Clients</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu-item" th:href="@{/comptes}">Comptes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu-item" th:href="@{/operations}">Operations</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 <div class="container mt-5">
   <h1>Comptes</h1>
   <!-- Error message display -->
