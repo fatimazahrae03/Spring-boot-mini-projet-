@@ -2,32 +2,139 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opérations du Compte</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px; /* Set a max-width for the container */
+        }
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #007bff;
+        }
+        .table {
+            font-size: 0.9rem; /* Reduce font size of the table */
+            width: 100%; /* Make the table take full width */
+            margin: 30px 0;
+            border: 1px solid #dee2e6; /* Add border to the table */
+        }
+        .table th, .table td {
+            text-align: center;
+        }
+        .table th {
+            background-color: #f8f9fa; /* Light background for the header */
+            color: #212529; /* Dark text for the header */
+            font-weight: bold;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2; /* Light grey for even rows */
+        }
+        .btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            color: #721c24;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px; /* Set height to ensure it is centered */
+        }
+        .form-container form {
+            width: 100%;
+            max-width: 500px; /* Max-width to keep the form at a reasonable size */
+        }
+        .navbar {
+            margin-bottom: 0;
+            position: relative;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .navbar-brand {
+            font-size: 2rem;
+        }
+        .menu-item {
+            font-size: 1.2rem;
+            margin: 0 15px;
+        }
+        .bank-name {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
+<div class="bank-name">HappyBank</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link menu-item" th:href="@{/client/home}">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link menu-item" th:href="@{'/comptes/client/compteclient/' + ${session.clientId}}">Mes Comptes</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div class="container mt-5">
     <h1>Opérations pour le Compte <span th:text="${codeCompte}"></span></h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Montant</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Boucle pour afficher chaque opération -->
-        <tr th:each="operation : ${operations}">
-            <!-- Utilise getDateOperation() pour afficher la date de manière uniforme -->
-            <td th:text="${operation.dateOperation}">Date</td>
-            <td th:text="${operation.type}">Type</td>
-            <td th:text="${operation.montant}">Montant</td>
-        </tr>
 
-        </tbody>
-    </table>
-    <a href="/comptes" class="btn btn-secondary mt-4">Retour aux Comptes</a>
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${operations}">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Montant</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="operation : ${operations}">
+                <td th:text="${#dates.format(operation.dateOperation, 'yyyy-MM-dd')}">Date</td>
+                <td th:text="${operation.type}">Type</td>
+                <td th:text="${operation.montant}">Montant</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

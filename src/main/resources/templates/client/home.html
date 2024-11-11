@@ -3,44 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Client Home</title>
+    <link rel="icon" href="/img/logo.png" type="image/png"> <!-- Logo for the tab -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            margin-bottom: 0;
+            position: relative;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .navbar-brand {
+            font-size: 2rem;
+        }
+        .menu-item {
+            font-size: 1.2rem;
+            margin: 0 15px;
+        }
+        .center-message {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .message {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            padding: 30px;
+            background-color: rgba(52, 58, 64, 0.8);
+            border: 2px solid #343a40;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        .message:hover {
+            transform: scale(1.05);
+        }
+        .bank-name {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <!-- Message de bienvenue pour le client -->
-    <div th:if="${session.clientId != null}">
+
+<!-- Bank Name -->
+<div class="bank-name">HappyBank</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link menu-item" th:href="@{/client/home}">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link menu-item" th:href="@{'/comptes/client/compteclient/' + ${session.clientId}}">Mes Comptes</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Display welcome message or login prompt -->
+<div class="center-message">
+    <div class="message" th:if="${session.clientId != null}">
+        <div class="message">
         <h1>Bienvenue, Client!</h1>
-        <p>Vous êtes connecté. Sélectionnez une option dans le menu ci-dessus pour commencer.</p>
-    </div>
+        Sélectionnez une option dans le menu ci-dessus pour commencer.
+    </div></div>
 
-    <div th:if="${session.clientId == null}">
-        <h1>Veuillez vous connecter d'abord!</h1>
-        <p>Vous devez être connecté pour accéder à cette section.</p>
-    </div>
 
-    <!-- Barre de navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
-        <a class="navbar-brand" href="#">Menu</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/client/home}">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <!-- Lien vers les comptes du client, utilise le clientId de la session -->
-
-                    <a class="nav-link" th:href="@{'/comptes/client/compteclient/' + ${session.clientId}}">Mes Comptes</a>
-
-                </li>
-
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Section pour du contenu ou des actions supplémentaires -->
-    <div class="mt-5">
-        <h3>Choisissez une option dans le menu ci-dessus pour commencer.</h3>
-    </div>
 </div>
 
 </body>

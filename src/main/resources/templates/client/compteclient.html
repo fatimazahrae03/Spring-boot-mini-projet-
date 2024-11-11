@@ -11,17 +11,30 @@
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
         }
+        .container {
+            max-width: 900px; /* Set a max-width for the container */
+        }
         h1 {
             text-align: center;
             margin-top: 30px;
             color: #007bff;
         }
         .table {
-            margin-top: 30px;
-            background-color: #ffffff;
+            font-size: 0.9rem; /* Reduce font size of the table */
+            width: 100%; /* Make the table take full width */
+            margin: 30px 0;
+            border: 1px solid #dee2e6; /* Add border to the table */
         }
         .table th, .table td {
             text-align: center;
+        }
+        .table th {
+            background-color: #f8f9fa; /* Light background for the header */
+            color: #212529; /* Dark text for the header */
+            font-weight: bold;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2; /* Light grey for even rows */
         }
         .btn-consulter {
             background-color: #28a745;
@@ -37,11 +50,60 @@
             border-radius: 5px;
             color: #721c24;
             text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px; /* Set height to ensure it is centered */
+        }
+        .form-container form {
+            width: 100%;
+            max-width: 500px; /* Max-width to keep the form at a reasonable size */
+        }.navbar {
+             margin-bottom: 0;
+             position: relative;
+             font-size: 1.5rem;
+             text-align: center;
+         }
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .navbar-brand {
+            font-size: 2rem;
+        }
+        .menu-item {
+            font-size: 1.2rem;
+            margin: 0 15px;
+        }
+        .bank-name {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
+<div class="bank-name">HappyBank</div>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link menu-item" th:href="@{/client/home}">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link menu-item" th:href="@{'/comptes/client/compteclient/' + ${session.clientId}}">Mes Comptes</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div class="container">
     <h1>Comptes for Client ID: <span th:text="${clientId}"></span></h1>
 
@@ -51,14 +113,14 @@
 
     <div th:if="${comptes}">
         <table class="table table-bordered">
-            <thead class="table-light">
+            <thead>
             <tr>
                 <th>Code Compte</th>
                 <th>Date Creation</th>
                 <th>Solde</th>
                 <th>Découvert</th>
                 <th>Taux</th>
-                <th>Actions</th>
+                <th class="actions-column">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -75,11 +137,26 @@
 
                 <!-- Consulter button redirects to operations page for this account -->
                 <td>
-                    <a th:href="@{'/operations/op/compte/' + ${compte.codeCompte}}" class="btn btn-primary">Consulter</a>
+                    <a th:href="@{'/operations/op/compte/' + ${compte.codeCompte}}" class="btn btn-success btn-sm">Consulter</a>
                 </td>
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <h3 class="mt-5">Ajouter un nouveau Compte</h3><br><br>
+    <div class="form-container">
+        <form th:action="@{/comptes/save}" method="post">
+            <div class="form-group">
+                <label for="codeCompte">Code Compte :</label>
+                <input type="text" id="codeCompte" name="codeCompte" class="form-control" required>
+            </div>
+            <div class="form-group mt-3">
+                <label for="solde">Solde :</label>
+                <input type="number" id="solde" name="solde" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Ajouter</button>
+        </form>
     </div>
 </div>
 

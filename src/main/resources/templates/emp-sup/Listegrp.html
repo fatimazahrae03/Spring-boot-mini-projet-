@@ -4,45 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Groupes</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 900px; /* Set a max-width for the container */
+        }
+        .table {
+            font-size: 0.9rem; /* Reduce font size of the table */
+            width: 100%; /* Make the table take full width */
+            margin: 0 auto; /* Center the table */
+        }
+        .table .actions-column {
+            width: 150px; /* Make the action column fit the button size */
+        }
+        .form-container {
+            display: flex;
+            justify-content: center; /* Center the form horizontally */
+            align-items: center; /* Center the form vertically */
+            height: 300px; /* Set a fixed height for vertical centering */
+            margin-top: 20px;
+        }
+        .form-container form {
+            width: 100%;
+            max-width: 500px; /* Max-width to keep the form at a reasonable size */
+        }
+
+        .navbar {
+            margin-bottom: 0; /* Remove margin below navbar */
+            position: relative; /* Allow positioning of bank name */
+            font-size: 1.5rem; /* Increase the font size of the menu */
+            text-align: center; /* Center the navbar text */
+        }
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .navbar-brand {
+            font-size: 2rem; /* Make the brand name larger */
+        }
+        .menu-item {
+            font-size: 1.2rem; /* Increase the size of menu items */
+            margin: 0 15px; /* Add horizontal margin to space out menu items */
+        }
+        .bank-name {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
-    <a class="navbar-brand" href="home.html">Menu</a>
+<div class="bank-name">HappyBank</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
     <div class="collapse navbar-collapse">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/groupes/list}">Groupes</a>
+                <a class="nav-link menu-item" th:href="@{/groupes/list}">Groupes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/employes/liste}">Employes</a>
+                <a class="nav-link menu-item" th:href="@{/employes/liste}">Employes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/clients}">Clients</a>
+                <a class="nav-link menu-item" th:href="@{/clients}">Clients</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/comptes}">Comptes</a>
+                <a class="nav-link menu-item" th:href="@{/comptes}">Comptes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/operations}">Operations</a>
+                <a class="nav-link menu-item" th:href="@{/operations}">Operations</a>
             </li>
-
         </ul>
     </div>
 </nav>
-<div class="container">
-    <h1 class="mt-4">Liste des Groupes</h1>
-    <table class="table table-striped mt-3">
+
+<div class="container mt-5">
+    <h1>Liste des Groupes</h1><br><br>
+
+    <!-- Table to display groups -->
+    <table class="table table-bordered" id="groupsTable">
         <thead>
         <tr>
             <th>ID</th>
             <th>Nom du Groupe</th>
             <th>Employés</th>
-            <th>Actions</th> <!-- Nouvelle colonne pour le bouton de suppression -->
+            <th class="actions-column">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Boucle pour chaque groupe -->
+        <!-- Dynamically display each group -->
         <tr th:each="groupe : ${groupes}">
             <td th:text="${groupe.codeGroupe}"></td>
             <td th:text="${groupe.nomGroupe}"></td>
@@ -52,7 +105,7 @@
                 </ul>
             </td>
             <td>
-                <!-- Formulaire pour supprimer chaque groupe -->
+                <!-- Delete group button -->
                 <form th:action="@{/groupes/delete/{codeGroupe}(codeGroupe=${groupe.codeGroupe})}" method="post">
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce groupe ?');">Supprimer</button>
                 </form>
@@ -61,29 +114,33 @@
         </tbody>
     </table>
 
-    <!-- Formulaire pour ajouter un nouveau groupe -->
+    <!-- Form to add a new group -->
     <h2 class="mt-5">Ajouter un Groupe</h2>
-    <form action="/groupes/save" method="post">
-        <div class="form-group">
-            <label for="nomGroupe">Nom du Groupe</label>
-            <input type="text" class="form-control" id="nomGroupe" name="nomGroupe" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Ajouter le Groupe</button>
-    </form>
+    <div class="form-container">
+        <form action="/groupes/save" method="post">
+            <div class="form-group">
+                <label for="nomGroupe">Nom du Groupe</label>
+                <input type="text" class="form-control" id="nomGroupe" name="nomGroupe" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter le Groupe</button>
+        </form>
+    </div>
 
-    <!-- Formulaire pour assigner des employés à un groupe -->
+    <!-- Form to assign employees to a group -->
     <h2 class="mt-5">Affecter des Employés à un Groupe</h2>
-    <form action="/groupes/assign" method="post">
-        <div class="form-group">
-            <label for="codeGroupe">ID du Groupe</label>
-            <input type="number" class="form-control" id="codeGroupe" name="codeGroupe" required>
-        </div>
-        <div class="form-group">
-            <label for="employeIds">IDs des Employés (séparés par des virgules)</label>
-            <input type="text" class="form-control" id="employeIds" name="employeIds" placeholder="Exemple : 1,2,3" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Affecter les Employés</button>
-    </form>
+    <div class="form-container">
+        <form action="/groupes/assign" method="post">
+            <div class="form-group">
+                <label for="codeGroupe">ID du Groupe</label>
+                <input type="number" class="form-control" id="codeGroupe" name="codeGroupe" required>
+            </div>
+            <div class="form-group">
+                <label for="employeIds">IDs des Employés (séparés par des virgules)</label>
+                <input type="text" class="form-control" id="employeIds" name="employeIds" placeholder="Exemple : 1,2,3" required>
+            </div>
+            <button type="submit" class="btn btn-success">Affecter les Employés</button>
+        </form>
+    </div>
 </div>
 
 </body>
