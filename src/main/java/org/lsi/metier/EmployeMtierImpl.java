@@ -39,5 +39,11 @@ public class EmployeMtierImpl implements EmployeMetier {
         return employeRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public Optional<Employe> findEmployeById(Long id) {
+        return employeRepository.findById(id);
+    }
+
+
 
 }

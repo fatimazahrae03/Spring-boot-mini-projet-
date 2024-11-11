@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Comptes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #007bff;
+        }
+        .table {
+            margin-top: 30px;
+            background-color: #ffffff;
+        }
+        .table th, .table td {
+            text-align: center;
+        }
+        .btn-consulter {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+        .btn-consulter:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            color: #721c24;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Comptes for Client ID: <span th:text="${clientId}"></span></h1>
+
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${comptes}">
+        <table class="table table-bordered">
+            <thead class="table-light">
+            <tr>
+                <th>Code Compte</th>
+                <th>Date Creation</th>
+                <th>Solde</th>
+                <th>Découvert</th>
+                <th>Taux</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="compte : ${comptes}">
+                <td th:text="${compte.codeCompte}"></td>
+                <td th:text="${#dates.format(compte.dateCreation, 'yyyy-MM-dd')}"></td>
+                <td th:text="${compte.solde}"></td>
+
+                <!-- Display Decouvert only if compte is of type CompteCourant -->
+                <td th:text="${compte instanceof T(org.lsi.entities.CompteCourant) ? compte.decouvert : 'N/A'}"></td>
+
+                <!-- Display Taux only if compte is of type CompteEpargne -->
+                <td th:text="${compte instanceof T(org.lsi.entities.CompteEpargne) ? compte.taux : 'N/A'}"></td>
+
+                <!-- Consulter button redirects to operations page for this account -->
+                <td>
+                    <a th:href="@{'/operations/op/compte/' + ${compte.codeCompte}}" class="btn btn-primary">Consulter</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

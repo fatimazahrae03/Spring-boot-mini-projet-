@@ -16,6 +16,15 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/employes/liste}">Employes</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/clients}">Clients</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/comptes}">Comptes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/operations}">Operations</a>
+            </li>
 
         </ul>
     </div>
@@ -27,6 +36,7 @@
         <tr>
             <th>ID</th>
             <th>Nom de l'Employé</th>
+            <th>Nom du Superviseur</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -35,10 +45,12 @@
         <tr th:each="employe : ${employes}">
             <td th:text="${employe.codeEmploye}"></td>
             <td th:text="${employe.nomEmploye}"></td>
+            <td th:text="${employe.employeSup != null ? employe.employeSup.nomEmploye : 'Aucun'}"></td>
+
             <td>
                 <!-- Bouton supprimer employé -->
                 <form th:action="@{'/employes/supprimer/' + ${employe.codeEmploye}}" method="post">
-                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    <button type="submit" class="btn btn-danger btn-sm"  onclick="return confirm('Voulez-vous vraiment supprimer ce groupe ?');">Supprimer</button>
                 </form>
             </td>
         </tr>

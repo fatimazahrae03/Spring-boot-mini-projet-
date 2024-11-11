@@ -212,4 +212,17 @@ public class CompteRestService {
         }
         return "employee/clientcompte"; // Matches the Thymeleaf template file comptes.html
     }
+
+    @GetMapping("/client/compteclient/{clientId}")
+    public String getComptesByClientIdofclient(@PathVariable("clientId") Long clientId, Model model) {
+        System.out.println("Fetching comptes for client ID: " + clientId);
+        List<Compte> comptes = compteMetier.getComptesByClientId(clientId);
+        if (comptes.isEmpty()) {
+            model.addAttribute("error", "No comptes found for this client.");
+        } else {
+            model.addAttribute("comptes", comptes);
+        }
+        model.addAttribute("clientId", clientId); // Add clientId to the model
+        return "client/compteclient";  // Ensure this matches your template path
+    }
 }

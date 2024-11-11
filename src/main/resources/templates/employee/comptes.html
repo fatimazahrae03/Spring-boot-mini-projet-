@@ -29,9 +29,13 @@
             <td th:text="${compte.codeCompte}"></td>
             <td th:text="${#dates.format(compte.dateCreation, 'yyyy-MM-dd')}"></td>
             <td th:text="${compte.solde}"></td>
-            <td th:if="${compte instanceof T(org.lsi.entities.CompteCourant)}" th:text="${compte.decouvert}"></td>
-            <td th:if="${compte instanceof T(org.lsi.entities.CompteEpargne)}" th:text="${compte.taux}"></td>
-            <!-- Place the delete button in the Actions column -->
+
+            <!-- Display Decouvert only if compte is of type CompteCourant -->
+            <td th:text="${compte instanceof T(org.lsi.entities.CompteCourant) ? compte.decouvert : 'N/A'}"></td>
+
+            <!-- Display Taux only if compte is of type CompteEpargne -->
+            <td th:text="${compte instanceof T(org.lsi.entities.CompteEpargne) ? compte.taux : 'N/A'}"></td>
+
             <td>
                 <form th:action="@{/comptes/delete/{id}(id=${compte.codeCompte})}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-danger">Delete</button>

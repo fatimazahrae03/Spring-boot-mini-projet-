@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Management System</title>
+    <title>Employee Supereur Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
 </head>
 <body>
@@ -24,10 +24,19 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/Listegrp}">Groupes</a>
+                    <a class="nav-link" th:href="@{/groupes/list}">Groupes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/Listeemp}">Employes</a>
+                    <a class="nav-link" th:href="@{/employes/liste}">Employes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/clients}">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/comptes}">Comptes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/operations}">Operations</a>
                 </li>
 
             </ul>

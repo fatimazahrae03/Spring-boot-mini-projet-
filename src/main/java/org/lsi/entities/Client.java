@@ -15,6 +15,8 @@ public class Client implements Serializable {
 
     private String nomClient;
 
+
+
     // One-to-many relationship with Compte, mapped by 'client' in the Compte class
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true) // Optionally set fetch type
     @JsonManagedReference  // Prevent circular reference by serializing only this side
@@ -39,6 +41,8 @@ public class Client implements Serializable {
     public void setCodeClient(Long codeClient) {
         this.codeClient = codeClient;
     }
+
+
 
     // Getter and Setter for nomClient
     public String getNomClient() {

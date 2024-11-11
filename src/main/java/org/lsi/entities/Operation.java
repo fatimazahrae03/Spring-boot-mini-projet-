@@ -24,6 +24,13 @@ public class Operation implements Serializable {
     @JoinColumn(name = "CODE_EMP")
     private Employe employe;
 
+
+    @Column(name = "DTYPE", insertable = false, updatable = false)
+    private String type;
+
+    public String getType() {
+        return type;
+    }
     public Operation(Date dateOperation, double montant) {
         this.dateOperation = dateOperation;
         this.montant = montant;

@@ -1,10 +1,12 @@
 package org.lsi.metier;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import org.lsi.dao.ClientRepository;
 import org.lsi.entities.Client;
 import org.lsi.entities.Compte;
+import org.lsi.entities.Employe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Service
@@ -37,5 +39,11 @@ public class ClientMetierImpl implements ClientMetier {
         // La suppression des comptes associés sera effectuée automatiquement en cascade
         clientRepository.delete(client);
     }
+
+    @Override
+    public Optional<Client> findByNomClient(String nomClient) {
+        return clientRepository.findByNomClient(nomClient); // Ensure you have this method in your repository
+    }
+
 
 }

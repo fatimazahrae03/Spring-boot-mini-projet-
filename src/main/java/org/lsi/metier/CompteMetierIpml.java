@@ -145,6 +145,7 @@ public class CompteMetierIpml implements CompteMetier {
     }
 
 
+
     @Override
     public Compte getCompteByCode(String codeCompte) {
         Compte compte = compteRepository.findByCodeCompte(codeCompte);

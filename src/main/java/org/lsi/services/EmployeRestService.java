@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/employes")
 public class EmployeRestService {
@@ -17,13 +19,28 @@ public class EmployeRestService {
     private EmployeMetier employeMetier;
 
     @PostMapping("/save")
-    public String saveEmploye(@RequestParam("nomEmploye") String nomEmploye, RedirectAttributes redirectAttributes) {
+    public String saveEmploye(
+            @RequestParam("nomEmploye") String nomEmploye,
+            RedirectAttributes redirectAttributes
+    ) {
         Employe newEmploye = new Employe();
         newEmploye.setNomEmploye(nomEmploye);
+
+        // Rechercher l'employé superviseur avec codeEmploye = 1
+        Optional<Employe> employeSup = employeMetier.findEmployeById(1L);
+
+        // Assigner employeSup si trouvé
+        employeSup.ifPresent(newEmploye::setEmployeSup);
+
+        // Sauvegarde de l'employé avec le champ employeSup
         employeMetier.saveEmploye(newEmploye);
+
+        // Ajout du message de succès
         redirectAttributes.addFlashAttribute("message", "Employé ajouté avec succès !");
+
         return "redirect:/employes/liste";
     }
+
     @GetMapping("/liste")
     public String afficherListeEmployes(Model model) {
         List<Employe> employes = employeMetier.listEmployes();

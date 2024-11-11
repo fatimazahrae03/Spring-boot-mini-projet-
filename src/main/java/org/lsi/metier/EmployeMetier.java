@@ -9,4 +9,6 @@ public interface EmployeMetier {
     public void deleteEmploye(Long id);
     public Employe getEmployeById(Long id);
     public Optional<Employe> findByNomEmploye(String nomEmploye) ;
+    Optional<Employe> findEmployeById(Long id);
+
 }

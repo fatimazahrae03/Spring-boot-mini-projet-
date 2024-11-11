@@ -52,4 +52,11 @@ import java.util.List;
         model.addAttribute("success", success);
         return "employee/operations"; // This will return the operations.html template
     }
+    @GetMapping("op/compte/{codeCompte}")
+    public String getOperationsByCompteId(@PathVariable String codeCompte, Model model) {
+        List<Operation> operations = operationMetier.findByCompteId(codeCompte);
+        model.addAttribute("operations", operations);  // Liste des opérations du compte
+        model.addAttribute("codeCompte", codeCompte);  // Pour afficher le code du compte dans la vue
+        return "client/clientoperation";  // Nom de la vue Thymeleaf (clientoperation.html)
+    }
 }
