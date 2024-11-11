@@ -71,5 +71,5 @@ public class Employe implements Serializable {
 
     public void setGroupes(Collection<Groupe> groupes) {
         this.groupes = groupes;
-    }
+}
 }
