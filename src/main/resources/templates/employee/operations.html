@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Operations</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1 class="mt-5">Operations</h1>
+  <div class="row mt-4">
+    <!-- Versement Form -->
+    <div class="col-md-4">
+      <h3>Versement</h3>
+      <form th:action="@{/operations/versement}" method="post">
+        <div class="form-group">
+          <label for="versement_codeCompte">Code Compte:</label>
+          <input type="text" class="form-control" id="versement_codeCompte" name="codeCompte" required>
+        </div>
+        <div class="form-group">
+          <label for="versement_montant">Montant:</label>
+          <input type="number" class="form-control" id="versement_montant" name="montant" required>
+        </div>
+        <div class="form-group">
+          <label for="versement_employeId">Employé ID:</label>
+          <input type="number" class="form-control" id="versement_employeId" name="employeId" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Effectuer Versement</button>
+      </form>
+    </div>
+
+    <!-- Retrait Form -->
+    <div class="col-md-4">
+      <h3>Retrait</h3>
+      <form th:action="@{/operations/retrait}" method="post">
+        <div class="form-group">
+          <label for="retrait_codeCompte">Code Compte:</label>
+          <input type="text" class="form-control" id="retrait_codeCompte" name="codeCompte" required>
+        </div>
+        <div class="form-group">
+          <label for="retrait_montant">Montant:</label>
+          <input type="number" class="form-control" id="retrait_montant" name="montant" required>
+        </div>
+        <div class="form-group">
+          <label for="retrait_employeId">Employé ID:</label>
+          <input type="number" class="form-control" id="retrait_employeId" name="employeId" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Effectuer Retrait</button>
+      </form>
+    </div>
+
+    <!-- Virement Form -->
+    <div class="col-md-4">
+      <h3>Virement</h3>
+      <form th:action="@{/operations/virement}" method="post">
+        <div class="form-group">
+          <label for="virement_codeCompteSource">Code Compte Source:</label>
+          <input type="text" class="form-control" id="virement_codeCompteSource" name="codeCompteSource" required>
+        </div>
+        <div class="form-group">
+          <label for="virement_codeCompteDest">Code Compte Destinataire:</label>
+          <input type="text" class="form-control" id="virement_codeCompteDest" name="codeCompteDest" required>
+        </div>
+        <div class="form-group">
+          <label for="virement_montant">Montant:</label>
+          <input type="number" class="form-control" id="virement_montant" name="montant" required>
+        </div>
+        <div class="form-group">
+          <label for="virement_employeId">Employé ID:</label>
+          <input type="number" class="form-control" id="virement_employeId" name="employeId" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Effectuer Virement</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
