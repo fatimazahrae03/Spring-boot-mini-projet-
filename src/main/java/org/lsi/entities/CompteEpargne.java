@@ -2,7 +2,6 @@ package org.lsi.entities;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import org.lsi.entities.Compte;
 
 import java.util.Date;
 
@@ -23,5 +22,9 @@ public class CompteEpargne extends Compte {
     public CompteEpargne() {
         super();
         // TODO Auto-generated constructor stub
+    }
+    @Override
+    public String getType() {
+        return "Compte Épargne";
     }
 }

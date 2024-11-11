@@ -103,7 +103,9 @@ package org.lsi.services;
 //}
 import jakarta.servlet.http.HttpSession;
 import org.lsi.entities.Compte;
+import org.lsi.entities.Operation;
 import org.lsi.metier.CompteMetier;
+import org.lsi.metier.OperationMetierImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -179,36 +181,6 @@ public class CompteRestService {
     }
 
 
-//@PostMapping("/{codeEmploye}")
-//public ResponseEntity<?> ajouterCompte(
-//        @PathVariable Long codeEmploye,
-//        @RequestBody Map<String, Object> requestBody
-//) {
-//    try {
-//        // Retrieve required fields
-//        String typeCompte = (String) requestBody.get("typeCompte");
-//        Number montantNumber = (Number) requestBody.get("montant");
-//        double montant = montantNumber != null ? montantNumber.doubleValue() : 0.0;
-//        Number codeClientNumber = (Number) requestBody.get("codeClient");
-//        Long codeClient = codeClientNumber != null ? codeClientNumber.longValue() : null;
-//
-//        // Optional fields
-//        Number tauxNumber = (Number) requestBody.getOrDefault("taux", null);
-//        Double taux = tauxNumber != null ? tauxNumber.doubleValue() : null;
-//
-//        Number decouvertNumber = (Number) requestBody.getOrDefault("decouvert", null);
-//        Double decouvert = decouvertNumber != null ? decouvertNumber.doubleValue() : null;
-//
-//        // Call the Metier layer
-//        Compte compte = compteMetier.ajouterCompte(typeCompte, montant, codeClient, codeEmploye, taux, decouvert);
-//
-//        // Return response
-//        return ResponseEntity.ok(compte);
-//    } catch (Exception e) {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-//    }}
-
-
 
     @GetMapping("/client/{clientId}")
     public String getComptesByClientId(@PathVariable("clientId") Long clientId, Model model) {
@@ -222,12 +194,22 @@ public class CompteRestService {
         model.addAttribute("clientId", clientId); // Add clientId to the model
         return "employee/comptes";  // Ensure this matches your template path
     }
+    @Autowired
+    private OperationMetierImpl operationMetier; // Add this to fetch operations
+
     @GetMapping
-    public ResponseEntity<List<Compte>> getAllComptes() {
+    public String getAllComptes(Model model) {
         List<Compte> comptes = compteMetier.getAllComptes();
         if (comptes.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            model.addAttribute("error", "No comptes found.");
+        } else {
+            // Fetch operations for each compte and set it in the model
+            for (Compte compte : comptes) {
+                List<Operation> operations = operationMetier.getOperationsByCompteId(compte.getCodeCompte());
+                compte.setOperations(operations);
+            }
+            model.addAttribute("comptes", comptes);
         }
-        return new ResponseEntity<>(comptes, HttpStatus.OK);
+        return "employee/clientcompte"; // Matches the Thymeleaf template file comptes.html
     }
 }

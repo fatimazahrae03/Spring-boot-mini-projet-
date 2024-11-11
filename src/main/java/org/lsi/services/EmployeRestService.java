@@ -38,4 +38,11 @@ public class EmployeRestService {
         redirectAttributes.addFlashAttribute("message", "Employé supprimé avec succès !");
         return "redirect:/employes/liste";
     }
+
+    @GetMapping("/comptes")
+    public String afficherComptes(@RequestParam(value = "success", required = false) String success, Model model) {
+        model.addAttribute("success", success);
+        return "comptes"; // Maps to resources/templates/comptes.html
+    }
+
 }

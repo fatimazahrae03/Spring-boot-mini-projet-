@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Comptes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1>Comptes</h1>
+  <!-- Error message display -->
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <!-- Table to display comptes -->
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Code Compte</th>
+      <th>Type</th>
+      <th>Client ID</th>
+      <th>Solde</th>
+      <th>Date Creation</th>
+      <th>Operations</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="compte : ${comptes}">
+      <td th:text="${compte.codeCompte}"></td>
+      <td th:text="${compte.type}"></td>
+      <td th:text="${compte.client != null ? compte.client.codeClient : 'No Client'}">No Client</td>
+      <td th:text="${compte.solde}"></td>
+      <td th:text="${#dates.format(compte.dateCreation, 'dd/MM/yyyy')}"></td>
+      <td>
+        <ul class="list-unstyled">
+          <li th:each="operation : ${compte.operations}">
+            <span th:text="${#dates.format(operation.dateOperation, 'dd/MM/yyyy')}"></span> =>
+            <span th:text="${operation.formattedMontant}"></span>
+            <span th:text="${operation instanceof T(org.lsi.entities.Retrait) ? 'R' : 'V '}"></span>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- JavaScript for the alert and redirect -->
+<script>
+  function submitTransactionForm(url) {
+    // Collect form data from inputs
+    const formData = new FormData();
+    formData.append("codeCompte", document.querySelector("#codeCompte").value);
+    formData.append("montant", document.querySelector("#montant").value);
+    formData.append("employeId", document.querySelector("#employeId").value);
+
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
+                showAlert(data.message, true); // show success alert
+              } else {
+                showAlert(data.message, false); // show error alert
+              }
+            })
+            .catch((error) => {
+              showAlert("An error occurred: " + error.message, false);
+            });
+  }
+
+  function showAlert(message, isSuccess) {
+    // Create alert div
+    const alertDiv = document.createElement("div");
+    alertDiv.classList.add("alert", isSuccess ? "alert-success" : "alert-danger");
+    alertDiv.innerHTML = '<strong>${isSuccess ? "Success" : "Failure"}:</strong> ${message}';
+    // Append the alert to the container
+    document.querySelector(".container").prepend(alertDiv);
+
+    // Auto-hide the alert and redirect after 3 seconds
+    setTimeout(() => {
+      alertDiv.remove();
+      window.location.href = "/clientcompte"; // Redirect to clientcompte
+    }, 3000);
+  }
+</script>
+</body>
+</html>

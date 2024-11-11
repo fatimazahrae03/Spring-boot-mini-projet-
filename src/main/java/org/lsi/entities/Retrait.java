@@ -1,7 +1,7 @@
 package org.lsi.entities;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 import java.util.Date;
 
@@ -14,9 +14,10 @@ public class Retrait extends Operation {
         this.setEmploye(employe);
     }
 
-    public Retrait() {
+    public Retrait() {}
 
+    @Override
+    public String getFormattedMontant() {
+        return "-" + super.getMontant(); // Format for Retrait
     }
-
 }
-
