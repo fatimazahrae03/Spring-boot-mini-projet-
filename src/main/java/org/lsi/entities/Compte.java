@@ -25,7 +25,7 @@ public abstract class Compte implements Serializable {
     private double solde;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CODE_CLI")
-    @JsonIgnoreProperties("comptes") // This will prevent serialization of the `comptes` property in `Client`
+    @JsonIgnoreProperties("comptes")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Client client;
 
@@ -33,7 +33,7 @@ public abstract class Compte implements Serializable {
     @JoinColumn(name="CODE_EMP")
     private Employe employe;
     @OneToMany(mappedBy="compte")
-    @JsonManagedReference  // Add this annotation
+    @JsonManagedReference
     private Collection<Operation> operations;
     public Compte(String codeCompte, Date dateCreation, double solde) {
         super();
