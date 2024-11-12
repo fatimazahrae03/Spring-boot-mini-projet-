@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface EmployeRepository extends JpaRepository<Employe, Long> {
-    Optional<Employe> findByNomEmploye(String nomEmploye); // Custom query to find by name
+    Optional<Employe> findByNomEmployeAndCodeEmploye(String nomEmploye, Long codeEmploye); // Custom query to find by name
 
 }

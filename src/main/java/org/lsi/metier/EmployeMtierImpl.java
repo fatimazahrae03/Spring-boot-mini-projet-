@@ -29,10 +29,7 @@ public class EmployeMtierImpl implements EmployeMetier {
             throw new RuntimeException("Employé avec ID " + id + " non trouvé.");
         }
     }
-    @Override
-    public Optional<Employe> findByNomEmploye(String nomEmploye) {
-        return employeRepository.findByNomEmploye(nomEmploye); // Ensure you have this method in your repository
-    }
+
 
     @Override
     public Employe getEmployeById(Long id) {
@@ -42,6 +39,9 @@ public class EmployeMtierImpl implements EmployeMetier {
     @Override
     public Optional<Employe> findEmployeById(Long id) {
         return employeRepository.findById(id);
+    }
+    public Optional<Employe> findByNomAndCodeEmploye(String nomEmploye, Long codeEmploye) {
+        return employeRepository.findByNomEmployeAndCodeEmploye(nomEmploye, codeEmploye);
     }
 
 

@@ -10,5 +10,6 @@ public interface ClientMetier {
     public Client saveClient(Client c);
     public List<Client> listClient();
     public void deleteClient(Long id);
-    public Optional<Client> findByNomClient(String nomClient);
+
+    Optional<Client> findByNomAndCodeClient(String nomClient, Long codeClient);
 }

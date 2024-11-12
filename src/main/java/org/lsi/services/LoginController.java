@@ -32,31 +32,31 @@ public class LoginController {
         return "emp-sup/home"; // Points to src/main/resources/templates/emp-sup/home.html
     }
 
-
     // Method to handle login submission
     @PostMapping("/login")
-    public String login(@RequestParam String employeeName, HttpSession session) {
-        // Vérification dans la table Client
-        Optional<Client> client = clientMetier.findByNomClient(employeeName);
+    public String login(@RequestParam String employeeName, @RequestParam Long userCode, HttpSession session) {
+        // Vérification dans la table Client par nom et code client
+        Optional<Client> client = clientMetier.findByNomAndCodeClient(employeeName, userCode);
         if (client.isPresent()) {
             // Ajouter l'ID du client dans la session pour maintenir la connexion
             session.setAttribute("clientId", client.get().getCodeClient());
             return "redirect:/client/home";
         }
 
-        // Vérification dans la table Employe
-        Employe employee = employeMetier.findByNomEmploye(employeeName).orElse(null);
-        if (employee != null) {
-            session.setAttribute("employeeId", employee.getCodeEmploye());
-            if (employee.getCodeEmploye() == 1) {
-                return "redirect:/emp-sup/home";
+        // Vérification dans la table Employe par nom et code employé
+        Optional<Employe> employee = employeMetier.findByNomAndCodeEmploye(employeeName, userCode);
+        if (employee.isPresent()) {
+            session.setAttribute("employeeId", employee.get().getCodeEmploye());
+            if (employee.get().getCodeEmploye().equals(1L)) {
+                return "redirect:/emp-sup/home"; // Code 1 pour redirection vers emp-sup/home
             } else {
-                return "redirect:/employee/home";
+                return "redirect:/employee/home"; // Autres codes pour employee/home
             }
         }
 
-        return "redirect:/"; // Erreur de connexion
+        return "redirect:/login?error"; // Redirection en cas d'erreur de connexion
     }
+
     // Method to show the home page for logged-in employees
     @GetMapping("/employee/home")
     public String showHomePage(HttpSession session) {
@@ -73,5 +73,4 @@ public class LoginController {
         }
         return "client/home";
 }
-
 }

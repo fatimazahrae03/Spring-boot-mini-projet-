@@ -40,10 +40,8 @@ public class ClientMetierImpl implements ClientMetier {
         clientRepository.delete(client);
     }
 
-    @Override
-    public Optional<Client> findByNomClient(String nomClient) {
-        return clientRepository.findByNomClient(nomClient); // Ensure you have this method in your repository
+    public Optional<Client> findByNomAndCodeClient(String nomClient, Long codeClient) {
+        return clientRepository.findByNomClientAndCodeClient(nomClient, codeClient);
     }
-
 
 }

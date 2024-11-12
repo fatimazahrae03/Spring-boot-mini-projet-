@@ -8,7 +8,7 @@ public interface EmployeMetier {
     public List<Employe> listEmployes();
     public void deleteEmploye(Long id);
     public Employe getEmployeById(Long id);
-    public Optional<Employe> findByNomEmploye(String nomEmploye) ;
-    Optional<Employe> findEmployeById(Long id);
 
+    Optional<Employe> findEmployeById(Long id);
+    Optional<Employe> findByNomAndCodeEmploye(String nomEmploye, Long codeEmploye);
 }
